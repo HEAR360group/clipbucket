@@ -20,7 +20,7 @@
 {$svg_manager_params = ['function'=>'get_svg_manager']}
 {$svg_manager = get_my_function($svg_manager_params)}
 {if $svg_manager}
-{$svg_manager}	
+{$svg_manager}
 {/if}
 
 
@@ -80,9 +80,15 @@
 
 <script src="{$cb_vjs_player_url}/js/videojs.thumbnails.js"></script>
 
+{foreach $video_files as $file}
+{$quality = get_cbvjs_quality($file)}
+{/foreach}
 
 {$default_quality = get_cbvjs_quality_type($video_files)}
-<video playsinline id="cb_video_js_{$vdata.videoid}" class="video-js vjs-default-skin" height="{$height}" width="{$width}" poster="{getThumb vdetails=$vdata size=768x432}" >
+<iframe id="cb_video_js_{$vdata.videoid}" width="{$width}" height="{$height}" src="http://hear360.co:8080/player/hear360_player/player.html?mediaURL={$file}" frameborder="0" allowfullscreen>
+</iframe>
+
+<!-- <video playsinline id="cb_video_js_{$vdata.videoid}" class="video-js vjs-default-skin" height="{$height}" width="{$width}" poster="{getThumb vdetails=$vdata size=768x432}" >
 
     {foreach $video_files as $file}
     {$quality = get_cbvjs_quality($file)}
@@ -95,10 +101,10 @@
     {/foreach}
     {ANCHOR place="play_def_sub"}
     <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
-</video>
+</video> -->
 
 
-
+<!--
 <script type="text/javascript">
 	var vid_id = "{$vdata.videoid}";
 	var videotitle = "{$vdata.title|escape_quotes}";
@@ -109,7 +115,7 @@
 	var autoplay = "{$player_config.autoplay}";
 	var default_res = "{$default_quality}";
 	console.log("Fuck : "+navigator.userAgent);
-
+	console.log("file : "+ "{$file}");
 
 	if (autoplay == 'no' || navigator.userAgent.match(/Android/i) ){
 		autoplay = false;
@@ -118,7 +124,7 @@
 	}
 	//player settings
 	var cb_player_setup = {
-		plugins : { }, 
+		plugins : { },
 		"techOrder" : ['html5', 'flash'],
 		"controls": true,
 		"autoplay": autoplay,
@@ -151,12 +157,12 @@
 		var cb_vjs = this;
 		//Calling Custom videoJs Elements Plugin
 		var el_options = {
-			logo : { 
+			logo : {
 					branding_logo : branding_logo,
 				    product_link : product_link,
-				    show_logo : true 
+				    show_logo : true
 			},
-			header : { 
+			header : {
 					uploader : uploader,
 					videotitle : videotitle,
 					videoid : vid_id
@@ -178,13 +184,13 @@
 		  			var cbVjsMenu = cbVjsMenuBtn.children[0];
 					var cbVjsMenuContent = cbVjsMenu.children[0];
 					var cbVjsMenuContentRes = cbVjsMenuContent.children;
-					
+
 					for (var i = 0; i < cbVjsMenuContentRes.length; i++ ){
 						cbVjsMenuContent.insertBefore(cbVjsMenuContentRes[i],cbVjsMenuContent.firstChild);
 					}
 		  		}
 		  	}
-		},100);  
+		},100);
 
 		//Calling Ima Ads plugin
 		if (play_ad){
@@ -198,7 +204,7 @@
 
 		//Calling TimeComments switcher plugin
 		if ( cb_timecomments_plugin == 'installed'  && typeof cb_timecomments_plugin != 'undefined'){
-			
+
 			var timecomments = '{$timecomments}';
 			var comments_options = {
 				comments : timecomments,
@@ -207,7 +213,7 @@
 				userid : user_id,
 				userprofile : user_profile,
 				username : username,
-				allowComments : allow_comments, 
+				allowComments : allow_comments,
 				forceShow : true
 			}
 			cb_vjs.timecomments(comments_options);
@@ -216,11 +222,11 @@
 			}else{
 				console.log("Time Comments are empty.. /");
 			}
-			
+
 		}
 
-		//Calling related Videos Plugin  
-		if ( related_videos != "" && typeof related_videos != 'undefined' && related_videos_active &&   
+		//Calling related Videos Plugin
+		if ( related_videos != "" && typeof related_videos != 'undefined' && related_videos_active &&
 			!video_editor_enabled ){
 			related_videos = JSON.parse(related_videos);
 			cb_vjs.relatedCarousel(related_videos);
@@ -242,26 +248,27 @@
 				dummy : false,
 				instances : i_instances,
 			}
-			cb_vjs.interactiveAds(i_instances_settings);	
+			cb_vjs.interactiveAds(i_instances_settings);
 		}
 
 		new_player_height(vid_id);
 	}
 	//Initializing
+
 	var cb_player = videojs('cb_video_js_'+vid_id, cb_player_setup , cb_vjs_callback);
 
 	$(document).ready(function() {
 		$(".video-js").on("contextmenu",function() {
 	       return false;
-	    }); 	
+	    });
 	});
-	
+
 	$(window).resize(function(event) {
 		new_player_height(vid_id);
 	});
 
 </script>
-
+-->
 
 <style type="text/css">
 	.video-js {
@@ -275,4 +282,3 @@
 		height: 100% !important;
 	}
 </style>
-
